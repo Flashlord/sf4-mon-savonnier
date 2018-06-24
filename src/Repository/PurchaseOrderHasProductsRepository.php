@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\StockMovementTypes;
+use App\Entity\PurchaseOrderHasProducts;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method StockMovementTypes|null find($id, $lockMode = null, $lockVersion = null)
- * @method StockMovementTypes|null findOneBy(array $criteria, array $orderBy = null)
- * @method StockMovementTypes[]    findAll()
- * @method StockMovementTypes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PurchaseOrderHasProducts|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PurchaseOrderHasProducts|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PurchaseOrderHasProducts[]    findAll()
+ * @method PurchaseOrderHasProducts[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class StockMovementTypesRepository extends ServiceEntityRepository
+class PurchaseOrderHasProductsRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, StockMovementTypes::class);
+        parent::__construct($registry, PurchaseOrderHasProducts::class);
     }
 
 //    /**
-//     * @return StockMovementTypes[] Returns an array of StockMovementTypes objects
+//     * @return SupplyOrdersHasProducts[] Returns an array of SupplyOrdersHasProducts objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class StockMovementTypesRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?StockMovementTypes
+    public function findOneBySomeField($value): ?SupplyOrdersHasProducts
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.exampleField = :val')

@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Products;
+use App\Entity\PurchaseOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Products|null find($id, $lockMode = null, $lockVersion = null)
- * @method Products|null findOneBy(array $criteria, array $orderBy = null)
- * @method Products[]    findAll()
- * @method Products[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PurchaseOrder|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PurchaseOrder|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PurchaseOrder[]    findAll()
+ * @method PurchaseOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductsRepository extends ServiceEntityRepository
+class PurchaseOrderRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Products::class);
+        parent::__construct($registry, PurchaseOrder::class);
     }
 
 //    /**
-//     * @return Products[] Returns an array of Products objects
+//     * @return PurchaseOrders[] Returns an array of PurchaseOrders objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ProductsRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Products
+    public function findOneBySomeField($value): ?PurchaseOrders
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

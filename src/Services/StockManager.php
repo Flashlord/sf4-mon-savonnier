@@ -2,35 +2,30 @@
 
 namespace App\Services;
 
-
-use Doctrine\ORM\EntityManager;
+use App\Entity\Product;
+use App\Repository\ProductRepository;
 
 class StockManager
 {
-	private $em;
 	
-	public function __construct(EntityManager $em) {
-		$this->em = $em;
-	}
+	private $productRepository;
 	
 	/**
-	 * @param string $productId
+	 * StockManager constructor.
+	 * @param ProductRepository $productRepository
 	 */
-	public function getStock(string $productId)
+	public function __construct(ProductRepository $productRepository)
 	{
-	
+		$this->productRepository = $productRepository;
 	}
 	
 	
-	public function addStockMovement(string $productId, int $value, string $movementType)
+	/**
+	 * @param Product $product
+	 * @return int
+	 */
+	public function getStock(Product $product)
 	{
-	
+		return (int) $this->productRepository->getStock($product);
 	}
-	
-	
-	public function doInventory()
-	{
-	
-	}
-	
 }
