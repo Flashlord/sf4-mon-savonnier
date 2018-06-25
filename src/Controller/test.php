@@ -12,6 +12,7 @@ class test extends Controller
 {
 	/**
 	 * @Route("/test");
+	 * @param StockManager $stockManager
 	 * @param ProductRepository $productRepository
 	 *
 	 * @return Response
@@ -21,5 +22,6 @@ class test extends Controller
 		$product = $productRepository->find(1);
 		return new Response($stockManager->getStock($product));
 	}
+	
 }
 

@@ -28,10 +28,16 @@ class PurchaseOrder
      */
     private $purchaseOrderHasProducts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PurchaseOrderHasOrderStatuses", mappedBy="purchaseOrder")
+     */
+    private $purchaseOrderHasOrderStatuses;
+
     
     public function __construct()
     {
         $this->purchaseOrderHasProducts = new ArrayCollection();
+        $this->purchaseOrderHasOrderStatuses = new ArrayCollection();
     }
 
     public function getId()
@@ -76,6 +82,37 @@ class PurchaseOrder
             // set the owning side to null (unless already changed)
             if ($purchaseOrderHasProduct->getPurchaseOrder() === $this) {
 	            $purchaseOrderHasProduct->setPurchaseOrder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PurchaseOrderHasOrderStatuses[]
+     */
+    public function getPurchaseOrderHasOrderStatuses(): Collection
+    {
+        return $this->purchaseOrderHasOrderStatuses;
+    }
+
+    public function addPurchaseOrderHasOrderStatus(PurchaseOrderHasOrderStatuses $purchaseOrderHasOrderStatus): self
+    {
+        if (!$this->purchaseOrderHasOrderStatuses->contains($purchaseOrderHasOrderStatus)) {
+            $this->purchaseOrderHasOrderStatuses[] = $purchaseOrderHasOrderStatus;
+            $purchaseOrderHasOrderStatus->setPurchaseOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removePurchaseOrderHasOrderStatus(PurchaseOrderHasOrderStatuses $purchaseOrderHasOrderStatus): self
+    {
+        if ($this->purchaseOrderHasOrderStatuses->contains($purchaseOrderHasOrderStatus)) {
+            $this->purchaseOrderHasOrderStatuses->removeElement($purchaseOrderHasOrderStatus);
+            // set the owning side to null (unless already changed)
+            if ($purchaseOrderHasOrderStatus->getPurchaseOrder() === $this) {
+                $purchaseOrderHasOrderStatus->setPurchaseOrder(null);
             }
         }
 

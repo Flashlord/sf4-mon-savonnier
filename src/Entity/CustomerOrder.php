@@ -27,11 +27,17 @@ class CustomerOrder
      * @ORM\OneToMany(targetEntity="App\Entity\CustomerOrderHasProducts", mappedBy="customerOrder")
      */
     private $customerOrderHasProducts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CustomerOrderHasOrderStatuses", mappedBy="CustomerOrder")
+     */
+    private $customerOrderHasOrderStatuses;
     
 
     public function __construct()
     {
         $this->customerOrderHasProducts = new ArrayCollection();
+        $this->customerOrderHasOrderStatuses = new ArrayCollection();
     }
 
     public function getId()
@@ -59,23 +65,54 @@ class CustomerOrder
         return $this->customerOrderHasProducts;
     }
 
-    public function addCustomerOrdersHasProduct(CustomerOrderHasProducts $customerOrdersHasProduct): self
+    public function addCustomerOrderHasProduct(CustomerOrderHasProducts $customerOrderHasProduct): self
     {
-        if (!$this->customerOrderHasProducts->contains($customerOrdersHasProduct)) {
-            $this->customerOrderHasProducts[] = $customerOrdersHasProduct;
-            $customerOrdersHasProduct->setCustomerOrder($this);
+        if (!$this->customerOrderHasProducts->contains($customerOrderHasProduct)) {
+            $this->customerOrderHasProducts[] = $customerOrderHasProduct;
+            $customerOrderHasProduct->setCustomerOrder($this);
         }
 
         return $this;
     }
 
-    public function removeCustomerOrdersHasProduct(CustomerOrderHasProducts $customerOrderHasProduct): self
+    public function removeCustomerOrderHasProduct(CustomerOrderHasProducts $customerOrderHasProduct): self
     {
         if ($this->customerOrderHasProducts->contains($customerOrderHasProduct)) {
             $this->customerOrderHasProducts->removeElement($customerOrderHasProduct);
             // set the owning side to null (unless already changed)
             if ($customerOrderHasProduct->getCustomerOrder() === $this) {
                 $customerOrderHasProduct->setCustomerOrder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CustomerOrderHasOrderStatuses[]
+     */
+    public function getCustomerOrderHasOrderStatuses(): Collection
+    {
+        return $this->customerOrderHasOrderStatuses;
+    }
+
+    public function addCustomerOrderHasOrderStatus(CustomerOrderHasOrderStatuses $customerOrderHasOrderStatus): self
+    {
+        if (!$this->customerOrderHasOrderStatuses->contains($customerOrderHasOrderStatus)) {
+            $this->customerOrderHasOrderStatuses[] = $customerOrderHasOrderStatus;
+            $customerOrderHasOrderStatus->setCustomerOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomerOrderHasOrderStatus(CustomerOrderHasOrderStatuses $customerOrderHasOrderStatus): self
+    {
+        if ($this->customerOrderHasOrderStatuses->contains($customerOrderHasOrderStatus)) {
+            $this->customerOrderHasOrderStatuses->removeElement($customerOrderHasOrderStatus);
+            // set the owning side to null (unless already changed)
+            if ($customerOrderHasOrderStatus->getCustomerOrder() === $this) {
+                $customerOrderHasOrderStatus->setCustomerOrder(null);
             }
         }
 
