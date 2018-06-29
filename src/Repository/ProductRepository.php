@@ -2,11 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\OrderStatuses;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,60 +18,33 @@ class ProductRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Product::class);
     }
-	
-	/**
-	 * Compute global stock for this product
-	 * @param Product $product
-	 * @return int
-	 */
-    public function getStock(Product $product)
+
+//    /**
+//     * @return Product[] Returns an array of Product objects
+//     */
+    /*
+    public function findByExampleField($value)
     {
-    	$qte = (int) $this->createQueryBuilder('p')
-		    ->join('p.purchaseOrderHasProducts','purchase')
-		    ->join('p.customerOrderHasProducts', 'customer')
-		    ->select('SUM(purchase.quantity) - SUM(customer.quantity)')
-		    ->getQuery()
-		    ->getOneOrNullResult()[1];
-		    
-		  return $this->getLastInventoryStock($product) + $qte;
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
     }
-	
-	/**
-	 * @param Product $product
-	 * @return int
-	 */
-    private function getLastInventoryStock(Product $product)
+    */
+
+    /*
+    public function findOneBySomeField($value): ?Product
     {
-	    $lastInventory = $product->getInventoryHasProducts()->last();
-	    if(null == $lastInventory) return 0;
-	
-	    return (int) $lastInventory->getQuantity();
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
-	
-	/**
-	 * Compute available Stock
-	 * @param Product $product
-	 * @return int
-	 */
-    public function getAvailableStock(Product $product)
-    {
-	    $qte = (int) $this->createQueryBuilder('p')
-		    ->join('p.purchaseOrderHasProducts','purchaseOrderHasProducts')
-		    ->join('p.customerOrderHasProducts', 'customerOrderHasProducts')
-		    ->join('purchaseOrderHasProducts.purchaseOrder', 'purchaseOrder')
-		    ->join('purchaseOrder.purchaseOrderHasOrderStatuses','purchaseOrderHasOrderStatuses')
-		    ->join('purchaseOrderHasOrderStatuses.OrderStatus','purchaseOrderStatus')
-		    ->join('customerOrderHasProducts.customerOrder', 'customerOrder')
-		    ->join('customerOrder.customerOrderHasOrderStatuses', 'customerOrderHasOrderStatuses')
-		    ->join('customerOrderHasOrderStatuses.OrderStatus', 'customerOrderStatus')
-		    ->andwhere('purchaseOrderStatus.type = '.OrderStatuses::PURCHASE_TYPE)
-		    ->andWhere('customerOrderStatus.type = '.OrderStatuses::CUSTOMER_TYPE)
-		    ->andWhere('purchaseOrderStatus.isStockAvailable = true')
-		    ->andWhere('customerOrderStatus.isStockAvailable = true')
-		    ->select('SUM(purchase.quantity) - SUM(customer.quantity)')
-		    ->getQuery()
-		    ->getOneOrNullResult()[1];
-	    
-	    return $this->getLastInventoryStock($product) + $qte;
-    }
+    */
 }

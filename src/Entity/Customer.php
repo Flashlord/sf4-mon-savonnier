@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  */
-class Product
+class Customer
 {
     /**
      * @ORM\Id()
@@ -21,32 +21,48 @@ class Product
     /**
      * @ORM\Column(type="string", length=45)
      */
-    private $name;
+    private $firstname;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="Product")
+     * @ORM\Column(type="string", length=45)
+     */
+    private $lastname;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="customer")
      */
     private $orders;
 
-    
     public function __construct()
     {
         $this->orders = new ArrayCollection();
     }
-	
+
     public function getId()
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->name;
+        return $this->firstname;
     }
 
-    public function setName(string $name): self
+    public function setFirstname(string $firstname): self
     {
-        $this->name = $name;
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -63,7 +79,7 @@ class Product
     {
         if (!$this->orders->contains($order)) {
             $this->orders[] = $order;
-            $order->setProduct($this);
+            $order->setCustomer($this);
         }
 
         return $this;
@@ -74,8 +90,8 @@ class Product
         if ($this->orders->contains($order)) {
             $this->orders->removeElement($order);
             // set the owning side to null (unless already changed)
-            if ($order->getProduct() === $this) {
-                $order->setProduct(null);
+            if ($order->getCustomer() === $this) {
+                $order->setCustomer(null);
             }
         }
 

@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\CustomerOrder;
+use App\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method CustomerOrder|null find($id, $lockMode = null, $lockVersion = null)
- * @method CustomerOrder|null findOneBy(array $criteria, array $orderBy = null)
- * @method CustomerOrder[]    findAll()
- * @method CustomerOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Customer|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Customer|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Customer[]    findAll()
+ * @method Customer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CustomerOrderRepository extends ServiceEntityRepository
+class CustomerRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, CustomerOrder::class);
+        parent::__construct($registry, Customer::class);
     }
 
 //    /**
-//     * @return CustomerOrders[] Returns an array of CustomerOrders objects
+//     * @return Customer[] Returns an array of Customer objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class CustomerOrderRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?CustomerOrders
+    public function findOneBySomeField($value): ?Customer
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
