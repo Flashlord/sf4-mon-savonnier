@@ -1,3 +1,6 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+users:
+    type:     annotation
+    resource: App\Controller\CustomerController

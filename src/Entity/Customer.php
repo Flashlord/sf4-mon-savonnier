@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use JMS\Serializer\Annotation\AccessorOrder;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Exclude;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @AccessorOrder("custom", custom = {"id"})
  */
 class Customer
 {
@@ -20,24 +23,34 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank(message="Firstname can not be blank or null")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank(message="Lastname can not be blank or null")
      */
     private $lastname;
-
+ 	
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="customer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Title")
+     * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Title can not be blank or null")
+     * @JMSSerializer\Type("Entity<App\Entity\Title>")
+     * @Exclude()
      */
-    private $orders;
-
-    public function __construct()
-    {
-        $this->orders = new ArrayCollection();
-    }
-
+    private $title;
+	
+		/**
+	   * @VirtualProperty
+		 * @SerializedName("title")
+		 */
+		public function getTitleLabel()
+		{
+			return $this->getTitle()->getLabel();
+		}
+    
     public function getId()
     {
         return $this->id;
@@ -47,7 +60,7 @@ class Customer
     {
         return $this->firstname;
     }
-
+	
     public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
@@ -67,33 +80,14 @@ class Customer
         return $this;
     }
 
-    /**
-     * @return Collection|Order[]
-     */
-    public function getOrders(): Collection
+    public function getTitle(): ?Title
     {
-        return $this->orders;
+        return $this->title;
     }
 
-    public function addOrder(Order $order): self
+    public function setTitle(Title $title): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getCustomer() === $this) {
-                $order->setCustomer(null);
-            }
-        }
+        $this->title = $title;
 
         return $this;
     }
