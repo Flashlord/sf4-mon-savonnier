@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Serializer\Handler;
+namespace App\Serializer\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -40,7 +40,6 @@ class EntityHandler implements SubscribingHandlerInterface
 				'method' => 'serializeEntity',
 			];
 		}
-		
 		return $methods;
 	}
 	

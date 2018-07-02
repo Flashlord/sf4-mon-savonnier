@@ -11,7 +11,6 @@ use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 
 class CustomerDeserializeJMSListener implements EventSubscriberInterface
 {
-	
 	private $manager;
 	
 	public function __construct(ObjectManager $manager)
@@ -35,7 +34,7 @@ class CustomerDeserializeJMSListener implements EventSubscriberInterface
 	{
 		$data = $event->getData();
 		$title = $this->manager->getRepository(Title::class)->findOneBy(['label' => $data['title']]);
-		$data['title'] = array("id" =>$title->getId());
+		$data['title'] = $title;
 		$event->setData($data);
 	}
 }

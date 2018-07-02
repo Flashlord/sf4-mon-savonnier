@@ -3,30 +3,26 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class CustomerController extends FOSRestController
+class CustomerController extends BaseController
 {
 	/**
 	 * Get a customer identified by its id
 	 * @Rest\Get("/customers/{id}")
-	 * @ParamConverter("customer", converter="fos_rest.request_body")
+	 * @ParamConverter("customer", class="App\Entity\Customer")
 	 *
 	 * @param Customer $customer
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
-	 * @internal param int $id
 	 *
 	 */
 	public function getOneCustomerAction(Customer $customer)
 	{
-		$view = view::create($customer, Response::HTTP_OK);
-		return $this->handleView($view);
+		return $this->sendResponse($customer, Response::HTTP_OK);
 	}
 	
 	
@@ -37,10 +33,15 @@ class CustomerController extends FOSRestController
 	 */
 	public function getCustomersAction()
 	{
-		$view = view::create($this->getDoctrine()
-			                     ->getRepository(Customer::class)
-			                     ->findAll(), Response::HTTP_OK);
-		return $this->handleView($view);
+		$allCustomers = $this->getDoctrine()
+			->getRepository(Customer::class)
+			->findAll();
+		
+		if(empty($allCustomers)) {
+			return $this->sendResponse(null, Response::HTTP_NOT_FOUND);
+		}
+		
+		return $this->sendResponse($allCustomers, Response::HTTP_OK);
 	}
 	
 	
@@ -55,18 +56,11 @@ class CustomerController extends FOSRestController
 	 */
 	public function createCustomerAction(Customer $customer)
 	{
-		var_dump($customer); die;
-		/** @var ConstraintViolationList $errors */
-		$errors = $this->container->get('validator')->validate($customer);
-		if(count($errors))
-		{
-			return $this->handleView(View::create($errors[0]->getMessage(), Response::HTTP_BAD_REQUEST));
-		}
+		$this->validateEntity($customer);
+		$this->em->persist($customer);
+		$this->em->flush();
 		
-		$this->getDoctrine()->getManager()->persist($customer);
-		$this->getDoctrine()->getManager()->flush();
-		
-		return $this->handleView(View::create($customer,201));
+		return $this->sendResponse($customer, Response::HTTP_CREATED);
 	}
 	
 	
@@ -81,19 +75,33 @@ class CustomerController extends FOSRestController
 	 */
 	public function deleteCustomerAction(Customer $customer)
 	{
-		$this->getDoctrine()->getManager()->remove($customer);
-		$this->getDoctrine()->getManager()->flush();
-		return $this->handleView(view::create(null, Response::HTTP_NO_CONTENT));
+		$this->em->remove($customer);
+		$this->em->flush();
+		return $this->sendResponse(null,Response::HTTP_NO_CONTENT);
 	}
 	
 	
 	/**
-	 * @param $title
-	 * @param $firstname
-	 * @param $lastname
+	 * @Rest\Put("/customers/{id}")
+	 * @ParamConverter("customer", converter="fos_rest.request_body")
+	 * @param Customer $customer
+	 * @param $id
+	 *
+	 * @return Response
+	 * @todo a terminer...
 	 */
-	public function updateCustomerAction($title, $firstname, $lastname) {
-	
+	public function updateCustomerAction(Customer $customer,$id) {
+		return $this->sendResponse(null,Response::HTTP_FORBIDDEN);
+		
+		$entityToModify = $this->getDoctrine()
+			->getRepository(Customer::class)
+			->find($id);
+		
+		if(empty($entityToModify)) {
+			throw new BadRequestHttpException("No customer with id ".$id);
+		}
+		
+		$this->validateEntity($customer);
 	}
 	
 }

@@ -3,14 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\AccessorOrder;
-use JMS\Serializer\Annotation\VirtualProperty;
-use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
- * @AccessorOrder("custom", custom = {"id"})
+ * @JMS\AccessorOrder("custom", custom = {"id"})
  */
 class Customer
 {
@@ -37,14 +34,14 @@ class Customer
      * @ORM\ManyToOne(targetEntity="App\Entity\Title")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank(message="Title can not be blank or null")
-     * @JMSSerializer\Type("Entity<App\Entity\Title>")
-     * @Exclude()
+     * @JMS\Type("Entity<App\Entity\Title>")
+     * @JMS\Groups("excluded_by_default")
      */
     private $title;
 	
 		/**
-	   * @VirtualProperty
-		 * @SerializedName("title")
+	   * @JMS\VirtualProperty
+		 * @JMS\SerializedName("title")
 		 */
 		public function getTitleLabel()
 		{
