@@ -29,17 +29,6 @@ services:
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
-    custom_serializer_handle:
-        class: App\Serializer\Handler\EntityHandler
-        arguments: ['@doctrine']
-        tags:
-            - {name: 'jms_serializer.subscribing_handler'}
-
-    jms_entity_handler:
-        class: App\Serializer\Handler\EntityHandler
-        tags:
-            - { name: jms_serializer.subscribing_handler }
-
     #App\Listeners\ExceptionListener:
     #    tags:
     #        - { name: kernel.event_listener, event: kernel.exception }

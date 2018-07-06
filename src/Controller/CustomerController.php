@@ -3,13 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
+use App\Models\CustomerModel;
+use App\Serializer\Manager\CustomerManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CustomerController extends BaseController
 {
+	private $customerManager;
+	
+	/**
+	 * CustomerController constructor.
+	 *
+	 * @param CustomerManager $customerManager
+	 *
+	 * @internal param ValidatorInterface $validator
+	 * @internal param EntityManagerInterface $em
+	 */
+	public function __construct(CustomerManager $customerManager) {
+		
+		$this->customerManager = $customerManager;
+	}
+	
+	
 	/**
 	 * Get a customer identified by its id
 	 * @Rest\Get("/customers/{id}")
@@ -48,19 +65,18 @@ class CustomerController extends BaseController
 	/**
 	 * Create a customer
 	 * @Rest\Post("/customers")
-	 * @ParamConverter("customer", converter="fos_rest.request_body")
+	 * @ParamConverter("customerModel", converter="fos_rest.request_body")
 	 *
-	 * @param Customer $customer
+	 * @param CustomerModel $customerModel
 	 *
 	 * @return Response
+	 * @internal param Customer $customer
+	 *
 	 */
-	public function createCustomerAction(Customer $customer)
+	public function createCustomerAction(CustomerModel $customerModel)
 	{
-		$this->validateEntity($customer);
-		$this->em->persist($customer);
-		$this->em->flush();
-		
-		return $this->sendResponse($customer, Response::HTTP_CREATED);
+		$customerEntity = $this->customerManager->populateAndSaveCustomerEntity($customerModel);
+		return $this->sendResponse($customerEntity, Response::HTTP_CREATED);
 	}
 	
 	
@@ -75,33 +91,23 @@ class CustomerController extends BaseController
 	 */
 	public function deleteCustomerAction(Customer $customer)
 	{
-		$this->em->remove($customer);
-		$this->em->flush();
+		$this->customerManager->deleteCustomer($customer);
 		return $this->sendResponse(null,Response::HTTP_NO_CONTENT);
 	}
 	
 	
 	/**
+	 * Update customer data
 	 * @Rest\Put("/customers/{id}")
 	 * @ParamConverter("customer", converter="fos_rest.request_body")
-	 * @param Customer $customer
-	 * @param $id
 	 *
 	 * @return Response
-	 * @todo a terminer...
+	 * @internal param Customer $customer
+	 * @internal param $id
+	 * @todo     a terminer...
 	 */
-	public function updateCustomerAction(Customer $customer,$id) {
+	public function updateCustomerAction() {
 		return $this->sendResponse(null,Response::HTTP_FORBIDDEN);
-		
-		$entityToModify = $this->getDoctrine()
-			->getRepository(Customer::class)
-			->find($id);
-		
-		if(empty($entityToModify)) {
-			throw new BadRequestHttpException("No customer with id ".$id);
-		}
-		
-		$this->validateEntity($customer);
 	}
 	
 }

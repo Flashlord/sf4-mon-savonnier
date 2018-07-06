@@ -36,13 +36,13 @@ class Customer
      * @ORM\ManyToOne(targetEntity="App\Entity\Title")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank(message="Title can not be blank or null")
-     * @JMS\Type("Entity<App\Entity\Title>")
      * @JMS\Groups("excluded_by_default")
      */
     private $title;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="customer")
+     * @JMS\Groups("excluded_by_default")
      */
     private $AddressType;
 
