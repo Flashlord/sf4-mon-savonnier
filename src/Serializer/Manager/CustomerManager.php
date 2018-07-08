@@ -18,13 +18,14 @@ class CustomerManager extends AbstractManager
 	 */
 	public function populateAndSaveCustomerEntity(CustomerModel $customer)
 	{
+		$this->validateModel($customer);
+		
 		// Create entity and persist
 		$newCustomer = new Customer();
 		$newCustomer
 			->setTitle($this->getTitle($customer->getTitle()))
 			->setLastname($customer->getLastname())
 			->setFirstname($customer->getFirstname());
-		$this->validateEntity($newCustomer);
 		
 		$this->em->persist($newCustomer);
 		$this->em->flush();

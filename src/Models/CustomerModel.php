@@ -2,21 +2,28 @@
 namespace App\Models;
 
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class CustomerModel
 {
 	/**
 	 * @JMS\Type("string")
+	 * @Assert\NotBlank(message="Please specify a title for this customer")
+	 * @Assert\Type("string")
 	 */
 	private $title;
 	
 	/**
    * @JMS\Type("string")
+	 * @Assert\NotBlank(message="Please specify customer's firstname")
+	 * @Assert\Type("string")
    */
 	private $firstname;
 	
 	/**
    * @JMS\Type("string")
+	 * @Assert\NotBlank(message="Please specify customer's lastname")
+	 * @Assert\Type("string")
    */
 	private $lastname;
 	
