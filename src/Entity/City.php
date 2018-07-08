@@ -35,7 +35,7 @@ class City
 
     public function setName(string $name): self
     {
-        $this->name = $name;
+        $this->name = strtolower($name);
 
         return $this;
     }

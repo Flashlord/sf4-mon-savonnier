@@ -28,7 +28,7 @@ class AbstractManager
 	 * Validate entity
 	 * @param $model
 	 */
-	protected function validateEntity($model)
+	protected function validateModel($model)
 	{
 		/** @var ConstraintViolationList $errors */
 		$errors = $this->validator->validate($model);

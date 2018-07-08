@@ -34,7 +34,7 @@ class Title
 
     public function setLabel(string $label): self
     {
-        $this->label = $label;
+        $this->label = strtolower($label);
 
         return $this;
     }

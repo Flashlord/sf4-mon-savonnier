@@ -72,7 +72,7 @@ class Customer
 	
     public function setFirstname(string $firstname): self
     {
-        $this->firstname = $firstname;
+        $this->firstname = strtolower($firstname);
 
         return $this;
     }
@@ -84,7 +84,7 @@ class Customer
 
     public function setLastname(string $lastname): self
     {
-        $this->lastname = $lastname;
+        $this->lastname = strtolower($lastname);
 
         return $this;
     }

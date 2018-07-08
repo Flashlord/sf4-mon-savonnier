@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
+ * @JMS\AccessorOrder("custom", custom = {"id","customer","addressLine1","addressLine2","zipCode","city"})
  */
 class Address
 {
@@ -40,9 +42,21 @@ class Address
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\City")
      * @ORM\JoinColumn(nullable=false)
+     * @JMS\Groups("excluded_by_default")
      */
     private $city;
-
+	
+	
+	/**
+	 * @JMS\VirtualProperty
+	 * @JMS\SerializedName("city")
+	 * @return string
+	 */
+    public function getCityName()
+    {
+    	return $this->getCity()->getName();
+    }
+    
     
     public function getId()
     {
@@ -68,7 +82,7 @@ class Address
 
     public function setAddressLine1(string $addressLine1): self
     {
-        $this->addressLine1 = $addressLine1;
+        $this->addressLine1 = strtolower($addressLine1);
 
         return $this;
     }
@@ -80,7 +94,7 @@ class Address
 
     public function setAddressLine2(?string $addressLine2): self
     {
-        $this->addressLine2 = $addressLine2;
+        $this->addressLine2 = strtolower($addressLine2);
 
         return $this;
     }

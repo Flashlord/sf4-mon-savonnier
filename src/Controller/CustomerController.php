@@ -37,7 +37,7 @@ class CustomerController extends BaseController
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 *
 	 */
-	public function getOneCustomerAction(Customer $customer)
+	public function getOneAction(Customer $customer)
 	{
 		return $this->sendResponse($customer, Response::HTTP_OK);
 	}
@@ -48,7 +48,7 @@ class CustomerController extends BaseController
 	 * @Rest\Get("/customers")
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function getCustomersAction()
+	public function getAllAction()
 	{
 		$allCustomers = $this->getDoctrine()
 			->getRepository(Customer::class)
@@ -73,7 +73,7 @@ class CustomerController extends BaseController
 	 * @internal param Customer $customer
 	 *
 	 */
-	public function createCustomerAction(CustomerModel $customerModel)
+	public function createAction(CustomerModel $customerModel)
 	{
 		$customerEntity = $this->customerManager->populateAndSaveCustomerEntity($customerModel);
 		return $this->sendResponse($customerEntity, Response::HTTP_CREATED);
@@ -89,7 +89,7 @@ class CustomerController extends BaseController
 	 *
 	 * @return Response
 	 */
-	public function deleteCustomerAction(Customer $customer)
+	public function deleteAction(Customer $customer)
 	{
 		$this->customerManager->deleteCustomer($customer);
 		return $this->sendResponse(null,Response::HTTP_NO_CONTENT);
